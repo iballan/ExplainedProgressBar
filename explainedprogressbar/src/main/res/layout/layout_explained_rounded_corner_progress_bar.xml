@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/v_container"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_explanation"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner_bg"
+        android:gravity="center"/>
+
+    <com.mbh.explainedprogressbar.TriangleView
+        android:id="@+id/v_triangle"
+        android:layout_width="25dp"
+        android:layout_height="25dp" />
+
+    <com.mbh.explainedprogressbar.RoundCornerProgressBar
+        android:id="@+id/rp_bar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:rcBackgroundColor="#ff0"
+        app:rcBackgroundPadding="2dp"
+        app:rcMax="100"
+        app:rcProgress="30"
+        app:rcProgressColor="#f0f"
+        app:rcRadius="20dp"
+        app:rcReverse="false"
+        app:rcSecondaryProgress="50"
+        app:rcSecondaryProgressColor="#0ff"/>
+
+
+</LinearLayout>
