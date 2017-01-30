@@ -30,7 +30,6 @@ public class ExplainedProgressBar extends LinearLayout {
     private float secondaryProgress;
     private float progress;
     private boolean isInitialized = false;
-    private float lastX = 0f;
 
     public ExplainedProgressBar(Context context) {
         super(context);
@@ -87,18 +86,21 @@ public class ExplainedProgressBar extends LinearLayout {
         this.progress = progress;
         moveCursorToAdobtProgress(progress);
         rp_bar.setProgress(progress);
+        v_triangle.moveToProgress(progress, maxProgress, rp_bar);
     }
 
     private void moveCursorToAdobtProgress(float progress) {
-        float barWidth = rp_bar.getWidth();
-        float widthPers = barWidth * 100 / maxProgress;
-        float x = (widthPers * progress / maxProgress) - (v_triangle.getWidth() / 2);
-        float minX = v_container.getLeft();
-        float maxX = v_container.getWidth() - v_triangle.getWidth();
-        if (!(x < (minX + 10) || x > (maxX - 10))) {
-            lastX = x;
-            ViewCompat.setTranslationX(v_triangle, x);
-        }
+//        float ratio = maxProgress / progress;
+//        float barWidth = rp_bar.getWidth();
+////        float widthPers = barWidth * maxProgress / 100;
+////        int progressWidth = (int) ((barWidth - (rp_bar.getPaddingLeft() * 2)) / ratio);
+//        float x = (barWidth / ratio) - (v_triangle.getWidth() / 2);
+////        float x = (widthPers * progress / maxProgress) - (v_triangle.getWidth() / 2);
+//        float minX = v_container.getLeft();
+//        float maxX = v_container.getWidth() - v_triangle.getWidth();
+//        if (!(x < (minX + 10) || x > (maxX - 10))) {
+//            ViewCompat.setTranslationX(v_triangle, x);
+//        }
     }
 
     public void setProgressColor(int color) {
@@ -123,6 +125,7 @@ public class ExplainedProgressBar extends LinearLayout {
 
     public void setMaxProgress(float maxProgress) {
         this.maxProgress = maxProgress;
+        this.rp_bar.setMax(maxProgress);
     }
 
     @Override
@@ -168,12 +171,12 @@ public class ExplainedProgressBar extends LinearLayout {
         }
 
         SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
         setProgress(ss.progress);
         setSecondaryProgress(ss.secondaryProgress);
         setTextExplanationBackgroundColor(ss.colorBackground);
         setTextExplanationCorners(ss.radius);
         setMaxProgress(ss.max);
-        super.onRestoreInstanceState(ss.getSuperState());
     }
 
     public void setTextColor(int textColor) {

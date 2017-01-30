@@ -7,6 +7,9 @@ import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -15,9 +18,14 @@ import android.view.View;
  */
 
 public class TriangleView extends View {
+    //    private float
     Paint mPaint;
-
     Path mPath;
+    private float progress;
+    private float maxProgress;
+    private float containerWidth;
+    private float minX, maxX;
+    private int color = Color.RED;
     private boolean isInitialized = false;
 
     public TriangleView(Context context) {
@@ -36,6 +44,7 @@ public class TriangleView extends View {
     }
 
     public void setColor(int color) {
+        this.color = color;
         mPaint.setColor(color);
         invalidate();
     }
@@ -89,10 +98,133 @@ public class TriangleView extends View {
         return path;
     }
 
+    public void moveToProgress(float progress, float maxProgress, View parent) {
+        this.maxProgress = maxProgress;
+        this.progress = progress;
+        this.containerWidth = parent.getWidth();
+        minX = parent.getLeft();
+        maxX = parent.getWidth() - this.getWidth();
+        moveToProgress();
+    }
+
+    private void moveToProgress() {
+        float ratio = maxProgress / progress;
+        float x = (containerWidth / ratio) - (this.getWidth() / 2);
+        if (!(x < minX || x > maxX)) {
+            ViewCompat.setTranslationX(this, x);
+        }
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
+    }
+
+    public void setMaxProgress(float maxProgress) {
+        this.maxProgress = maxProgress;
+    }
+
+    public void setContainerWidth(float containerWidth) {
+        this.containerWidth = containerWidth;
+    }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        //begin boilerplate code that allows parent classes to save state
+        Parcelable superState = super.onSaveInstanceState();
+
+        SavedState ss = new SavedState(superState);
+        //end
+        ss.x = getX();
+        ss.progress = progress;
+        ss.maxProgress = maxProgress;
+        ss.color = color;
+        ss.minX = minX;
+        ss.maxX = maxX;
+        ss.containerWidth = containerWidth;
+
+        return ss;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        //begin boilerplate code so parent classes can restore state
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        setX(ss.x);
+        ViewCompat.setTranslationX(this, ss.x);
+        containerWidth = ss.containerWidth;
+        minX = ss.minX;
+        maxX = ss.maxX;
+        maxProgress = ss.maxProgress;
+        progress = ss.progress;
+        color = ss.color;
+        moveToProgress();
+
+    }
 
     public enum Direction {
         NORTH, SOUTH, EAST, WEST
     }
 
+    private static class SavedState extends BaseSavedState {
+        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
 
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+
+        float x;
+        float y;
+        float containerWidth;
+        float minX;
+        float maxX;
+        float maxProgress;
+        float progress;
+        float secondaryProgress;
+        int color;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            this.x = in.readFloat();
+            this.y = in.readFloat();
+            this.containerWidth = in.readFloat();
+            this.minX = in.readFloat();
+            this.maxX = in.readFloat();
+            this.maxProgress = in.readFloat();
+            this.progress = in.readFloat();
+            this.secondaryProgress = in.readFloat();
+
+            this.color = in.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+
+            out.writeFloat(this.x);
+            out.writeFloat(this.y);
+            out.writeFloat(this.containerWidth);
+            out.writeFloat(this.minX);
+            out.writeFloat(this.maxX);
+
+            out.writeFloat(this.maxProgress);
+            out.writeFloat(this.progress);
+            out.writeFloat(this.secondaryProgress);
+
+            out.writeInt(this.color);
+        }
+    }
 }

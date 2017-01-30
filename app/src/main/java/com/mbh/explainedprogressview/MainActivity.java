@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         v_explainedPb = (ExplainedProgressBar) findViewById(R.id.v_explainedPb);
         seek_progressValue = (AppCompatSeekBar) findViewById(R.id.seek_progressValue);
 
+        v_explainedPb.setMaxProgress(50);
         v_explainedPb.setTextExplanation("HABIABI THIS IS TEXT");
         v_explainedPb.setTextExplanationBackgroundColor(Color.BLUE);
         v_explainedPb.setTextColor(Color.WHITE);
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initSeekbar() {
-        seek_progressValue.setMax(100);
+        seek_progressValue.setMax(50);
         seek_progressValue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
