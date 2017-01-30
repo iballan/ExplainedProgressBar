@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.mbh.explainedprogressview.MainActivity">
 
-    <com.mbh.explainedprogressbar.ExplainedProgressBar
+    <com.mbh.explainedprogressbar.ExplainedProgressBar2
         android:id="@+id/v_explainedPb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

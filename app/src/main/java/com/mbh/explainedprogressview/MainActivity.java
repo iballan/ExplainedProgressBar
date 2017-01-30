@@ -9,10 +9,11 @@ import android.util.Log;
 import android.widget.SeekBar;
 
 import com.mbh.explainedprogressbar.ExplainedProgressBar;
+import com.mbh.explainedprogressbar.ExplainedProgressBar2;
 
 public class MainActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "ExplainedProgressBar";
-    ExplainedProgressBar v_explainedPb;
+    ExplainedProgressBar2 v_explainedPb;
     AppCompatSeekBar seek_progressValue;
 
     @Override
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        v_explainedPb = (ExplainedProgressBar) findViewById(R.id.v_explainedPb);
+        v_explainedPb = (ExplainedProgressBar2) findViewById(R.id.v_explainedPb);
         seek_progressValue = (AppCompatSeekBar) findViewById(R.id.seek_progressValue);
 
         v_explainedPb.setMaxProgress(50);
@@ -53,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
         }else{
             seek_progressValue.setProgress(50);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        v_explainedPb.setProgress(seek_progressValue.getProgress());
     }
 
     private void log(String logTxt) {
