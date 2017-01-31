@@ -16,7 +16,7 @@ limitations under the License.
 
 */
 
-package com.mbh.explainedprogressbar.base;
+package com.mbh.explainedprogressbar.bar.base;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -39,9 +39,6 @@ import android.widget.TextView;
 import com.mbh.explainedprogressbar.R;
 
 
-/**
- * Created by Akexorcist on 9/14/15 AD.
- */
 public abstract class BaseRoundCornerProgressBar extends LinearLayout {
     protected final static int DEFAULT_MAX_PROGRESS = 100;
     protected final static int DEFAULT_PROGRESS = 0;
@@ -431,7 +428,7 @@ public abstract class BaseRoundCornerProgressBar extends LinearLayout {
         public void onProgressChanged(int viewId, float progress, boolean isPrimaryProgress, boolean isSecondaryProgress);
     }
 
-    private static class SavedState extends BaseSavedState {
+    public static class SavedState extends BaseSavedState {
         public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
@@ -455,7 +452,7 @@ public abstract class BaseRoundCornerProgressBar extends LinearLayout {
             super(superState);
         }
 
-        private SavedState(Parcel in) {
+        SavedState(Parcel in) {
             super(in);
             this.max = in.readFloat();
             this.progress = in.readFloat();

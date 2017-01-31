@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:id="@+id/v_bubbleContainer"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_explanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner_bg"
+        android:gravity="center"
+        android:layout_marginBottom="0dp"
+        android:padding="10dp"/>
+
+    <com.mbh.explainedprogressbar.TriangleView
+        android:id="@+id/v_triangle"
+        android:layout_width="30dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="0dp"
+        android:paddingTop="0dp"/>
+</LinearLayout>

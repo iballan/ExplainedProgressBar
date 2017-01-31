@@ -8,26 +8,33 @@ import android.support.v7.widget.AppCompatSeekBar;
 import android.util.Log;
 import android.widget.SeekBar;
 
-import com.mbh.explainedprogressbar.ExplainedProgressBar;
-import com.mbh.explainedprogressbar.ExplainedProgressBar2;
+import com.mbh.explainedprogressbar.ExplainedBubbleView;
+import com.mbh.explainedprogressbar.ExplainedViewManager;
+import com.mbh.explainedprogressbar.bar.RoundCornerProgressBar;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "ExplainedProgressBar";
-    ExplainedProgressBar2 v_explainedPb;
     AppCompatSeekBar seek_progressValue;
+    ExplainedViewManager mExplainedViewManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        v_explainedPb = (ExplainedProgressBar2) findViewById(R.id.v_explainedPb);
+        mExplainedViewManager = new ExplainedViewManager.ExplainedViewManagerBuilder()
+                .setBubbleView((ExplainedBubbleView) findViewById(R.id.e_bubbleView))
+                .setProgressBar((RoundCornerProgressBar) findViewById(R.id.rp_bar))
+                .setShowOnProgressChange(true)
+                .setShowForSeconds(3).create();
+
         seek_progressValue = (AppCompatSeekBar) findViewById(R.id.seek_progressValue);
 
-        v_explainedPb.setMaxProgress(50);
-        v_explainedPb.setTextExplanation("HABIABI THIS IS TEXT");
-        v_explainedPb.setTextExplanationBackgroundColor(Color.BLUE);
-        v_explainedPb.setTextColor(Color.WHITE);
+        mExplainedViewManager.setMaxProgress(50);
+        mExplainedViewManager.setText("HABIABI THIS IS TEXT");
+        mExplainedViewManager.setBubbleBackgroundColor(Color.BLUE);
+        mExplainedViewManager.setTextColor(Color.WHITE);
         initSeekbar();
     }
 
@@ -36,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         seek_progressValue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                v_explainedPb.setProgress(progress);
+                mExplainedViewManager.setProgress(progress);
             }
 
             @Override
@@ -51,15 +58,16 @@ public class MainActivity extends AppCompatActivity {
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             seek_progressValue.setProgress(50, true);
-        }else{
+        } else {
             seek_progressValue.setProgress(50);
         }
+        mExplainedViewManager.setProgress(seek_progressValue.getProgress());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        v_explainedPb.setProgress(seek_progressValue.getProgress());
+        mExplainedViewManager.setProgress(seek_progressValue.getProgress());
     }
 
     private void log(String logTxt) {

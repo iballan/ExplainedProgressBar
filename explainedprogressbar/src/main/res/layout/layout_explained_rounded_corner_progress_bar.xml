@@ -19,7 +19,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp" />
 
-    <com.mbh.explainedprogressbar.RoundCornerProgressBar
+    <com.mbh.explainedprogressbar.bar.RoundCornerProgressBar
         android:id="@+id/rp_bar"
         android:layout_width="match_parent"
         android:layout_height="20dp"

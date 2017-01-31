@@ -7,13 +7,14 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.mbh.explainedprogressbar.bar.RoundCornerProgressBar;
 
 /**
  * Createdby MBH on 27/01/2017.
@@ -69,7 +70,6 @@ public class ExplainedProgressBar extends LinearLayout {
 
     public void setTextExplanationCorners(int radius) {
         ((GradientDrawable) tv_exp.getBackground()).setCornerRadius(radius);
-        v_triangle.setCornerRadius(radius);
         this.radius = radius;
     }
 

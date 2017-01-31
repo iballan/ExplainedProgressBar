@@ -16,7 +16,7 @@ limitations under the License.
 
 */
 
-package com.mbh.explainedprogressbar;
+package com.mbh.explainedprogressbar.bar;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -33,7 +33,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mbh.explainedprogressbar.base.BaseRoundCornerProgressBar;
+import com.mbh.explainedprogressbar.R;
+import com.mbh.explainedprogressbar.bar.base.BaseRoundCornerProgressBar;
 
 /**
  * Created by Akexorcist on 9/16/15 AD.

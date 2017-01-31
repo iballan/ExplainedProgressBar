@@ -11,14 +11,29 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.mbh.explainedprogressview.MainActivity">
 
-    <com.mbh.explainedprogressbar.ExplainedProgressBar2
-        android:id="@+id/v_explainedPb"
+    <!--<com.mbh.explainedprogressbar.ExplainedProgressBar4-->
+    <!--android:id="@+id/v_explainedPb"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"/>-->
+
+
+    <com.mbh.explainedprogressbar.ExplainedBubbleView
+        android:id="@+id/e_bubbleView"
+        android:layout_above="@+id/rp_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <com.mbh.explainedprogressbar.bar.RoundCornerProgressBar
+        android:id="@+id/rp_bar"
+        android:layout_marginBottom="40dp"
+        android:layout_above="@+id/seek_progressValue"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
     <android.support.v7.widget.AppCompatSeekBar
-        android:layout_centerInParent="true"
         android:id="@+id/seek_progressValue"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"/>
 </RelativeLayout>

@@ -16,7 +16,7 @@ limitations under the License.
 
 */
 
-package com.mbh.explainedprogressbar;
+package com.mbh.explainedprogressbar.bar;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
@@ -25,7 +25,8 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.mbh.explainedprogressbar.base.BaseRoundCornerProgressBar;
+import com.mbh.explainedprogressbar.R;
+import com.mbh.explainedprogressbar.bar.base.BaseRoundCornerProgressBar;
 
 
 /**

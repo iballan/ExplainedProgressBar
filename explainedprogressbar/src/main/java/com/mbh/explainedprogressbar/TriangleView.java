@@ -1,12 +1,13 @@
 package com.mbh.explainedprogressbar;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.ViewCompat;
@@ -19,8 +20,6 @@ import android.view.View;
 
 public class TriangleView extends View {
     //    private float
-    Paint mPaint;
-    Path mPath;
     private float progress;
     private float maxProgress;
     private float containerWidth;
@@ -28,6 +27,17 @@ public class TriangleView extends View {
     private int color = Color.RED;
     private boolean isInitialized = false;
 
+    static final class TriangleDrawer implements Runnable {
+        final TriangleView triangleView;
+
+        TriangleDrawer(TriangleView basketBubbleTriangle) {
+            this.triangleView = basketBubbleTriangle;
+        }
+
+        public final void run() {
+            this.triangleView.drawTriangle();
+        }
+    }
     public TriangleView(Context context) {
         super(context);
         create();
@@ -45,74 +55,53 @@ public class TriangleView extends View {
 
     public void setColor(int color) {
         this.color = color;
-        mPaint.setColor(color);
-        invalidate();
+        post(new TriangleDrawer(this));
     }
 
-    public void setCornerRadius(float radius) {
-        mPaint.setPathEffect(new CornerPathEffect(radius));
+    private final void drawTriangle() {
+        Path path = new Path();
+        path.setFillType(Path.FillType.EVEN_ODD);
+        path.moveTo(0.0f, 0.0f);
+        path.lineTo((float) getLayoutParams().width, 0.0f);
+        path.lineTo((float) (getLayoutParams().width / 2), (float) getLayoutParams().height);
+        path.lineTo(0.0f, 0.0f);
+        path.close();
+        Paint paint = new Paint(1);
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.FILL);
+        Bitmap bitmap = Bitmap.createBitmap(getLayoutParams().width, getLayoutParams().height, Bitmap.Config.ARGB_8888);
+        new Canvas(bitmap).drawPath(path, paint);
+        if (Build.VERSION.SDK_INT >= 16) {
+            setBackground(new BitmapDrawable(getResources(), bitmap));
+        } else {
+            setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+        }
     }
 
     private void create() {
         if (isInitialized) return;
         isInitialized = true;
-        mPaint = new Paint();
-        mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.RED);
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        mPath = calculate(Direction.SOUTH);
-        canvas.drawPath(mPath, mPaint);
-    }
-
-    private Path calculate(Direction direction) {
-        Point p1 = new Point();
-        p1.x = 0;
-        p1.y = 0;
-
-        Point p2 = null, p3 = null;
-
-        int width = getWidth();
-
-        if (direction == Direction.NORTH) {
-            p2 = new Point(p1.x + width, p1.y);
-            p3 = new Point(p1.x + (width / 2), p1.y - width);
-        } else if (direction == Direction.SOUTH) {
-            p2 = new Point(p1.x + width, p1.y);
-            p3 = new Point(p1.x + (width / 2), p1.y + width);
-        } else if (direction == Direction.EAST) {
-            p2 = new Point(p1.x, p1.y + width);
-            p3 = new Point(p1.x - width, p1.y + (width / 2));
-        } else if (direction == Direction.WEST) {
-            p2 = new Point(p1.x, p1.y + width);
-            p3 = new Point(p1.x + width, p1.y + (width / 2));
-        }
-        Path path = new Path();
-        path.moveTo(p1.x, p1.y);
-        path.lineTo(p2.x, p2.y);
-        path.lineTo(p3.x, p3.y);
-
-        return path;
+        post(new TriangleDrawer(this));
     }
 
     public void moveToProgress(float progress, float maxProgress, View parent) {
         this.maxProgress = maxProgress;
         this.progress = progress;
-        this.containerWidth = parent.getWidth();
-        minX = parent.getLeft();
-        maxX = parent.getWidth() - this.getWidth();
+        this.containerWidth = parent.getMeasuredWidth();
+        minX = 10;
+        maxX = this.containerWidth - this.getMeasuredWidth()-10;
         moveToProgress();
     }
 
     private void moveToProgress() {
         float ratio = maxProgress / progress;
         float x = (containerWidth / ratio) - (this.getWidth() / 2);
-        if (!(x < minX || x > maxX)) {
-            ViewCompat.setTranslationX(this, x);
+        if(x<minX){
+            x = minX;
+        }else if(x > maxX){
+            x = maxX;
         }
+        ViewCompat.setTranslationX(this, x);
     }
 
     public void setProgress(float progress) {
@@ -155,15 +144,15 @@ public class TriangleView extends View {
 
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-        setX(ss.x);
-        ViewCompat.setTranslationX(this, ss.x);
+//        setX(ss.x);
+//        ViewCompat.setTranslationX(this, ss.x);
         containerWidth = ss.containerWidth;
         minX = ss.minX;
         maxX = ss.maxX;
         maxProgress = ss.maxProgress;
         progress = ss.progress;
         color = ss.color;
-        moveToProgress();
+//        moveToProgress();
 
     }
 
@@ -172,13 +161,13 @@ public class TriangleView extends View {
     }
 
     private static class SavedState extends BaseSavedState {
-        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
+        public static final Creator<SavedState> CREATOR = new Creator<TriangleView.SavedState>() {
+            public TriangleView.SavedState createFromParcel(Parcel in) {
+                return new TriangleView.SavedState(in);
             }
 
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
+            public TriangleView.SavedState[] newArray(int size) {
+                return new TriangleView.SavedState[size];
             }
         };
 
